@@ -29,8 +29,3 @@ CREATE TABLE LinhaEnc (
     FOREIGN KEY (ProdutoId) REFERENCES Produto(ProdutoId)
 );
 
--- Inserting dummy data
-INSERT INTO Cliente VALUES (1, 'John Doe', '123 Main St');
-INSERT INTO Produto VALUES (1, 'Product A', 9.99, 100, 0);
-INSERT INTO Encomenda VALUES (1, 1, GETDATE(), 0.00);
-INSERT INTO LinhaEnc VALUES (1, 1, 1);
