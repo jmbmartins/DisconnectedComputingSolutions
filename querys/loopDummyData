@@ -1,0 +1,10 @@
+-- Inserting dummy data
+DECLARE @i INT = 2;
+WHILE @i <= 21
+BEGIN
+    INSERT INTO Cliente VALUES (@i, 'John Doe' + CAST(@i AS VARCHAR), '123 Main St' + CAST(@i AS VARCHAR));
+    INSERT INTO Produto VALUES (@i, 'Product A' + CAST(@i AS VARCHAR), 9.99, 100, 0);
+    INSERT INTO Encomenda VALUES (@i, @i, GETDATE(), 0.00);
+    INSERT INTO LinhaEnc VALUES (@i, @i, 1);
+    SET @i = @i + 1;
+END
