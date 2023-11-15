@@ -1,0 +1,51 @@
+-- Adding more dummy data
+
+-- Adding customers
+INSERT INTO Cliente VALUES (2, 'Jane Smith', '456 Oak St');
+INSERT INTO Cliente VALUES (3, 'Bob Johnson', '789 Pine St');
+INSERT INTO Cliente VALUES (4, 'Alice Williams', '101 Elm St');
+
+-- Adding products
+INSERT INTO Produto VALUES (2, 'Product B', 19.99, 50, 0);
+INSERT INTO Produto VALUES (3, 'Product C', 29.99, 75, 0);
+INSERT INTO Produto VALUES (4, 'Product D', 39.99, 30, 0);
+
+-- Adding orders
+INSERT INTO Encomenda VALUES (2, 2, GETDATE(), 0.00);
+INSERT INTO Encomenda VALUES (3, 3, GETDATE(), 0.00);
+INSERT INTO Encomenda VALUES (4, 1, GETDATE(), 0.00);
+
+-- Adding line items to orders
+INSERT INTO LinhaEnc VALUES (2, 2, 2);
+INSERT INTO LinhaEnc VALUES (2, 3, 3);
+INSERT INTO LinhaEnc VALUES (3, 1, 1);
+INSERT INTO LinhaEnc VALUES (3, 4, 2);
+INSERT INTO LinhaEnc VALUES (4, 3, 1);
+INSERT INTO LinhaEnc VALUES (4, 4, 3);
+
+-- Adding more customers
+INSERT INTO Cliente VALUES (5, 'David Lee', '202 Maple St');
+INSERT INTO Cliente VALUES (6, 'Emily Davis', '303 Birch St');
+INSERT INTO Cliente VALUES (7, 'Chris Miller', '404 Cedar St');
+INSERT INTO Cliente VALUES (8, 'Sophia White', '505 Walnut St');
+
+-- Adding more products
+INSERT INTO Produto VALUES (5, 'Product E', 49.99, 25, 0);
+INSERT INTO Produto VALUES (6, 'Product F', 59.99, 60, 0);
+INSERT INTO Produto VALUES (7, 'Product G', 69.99, 45, 0);
+
+-- Adding more orders
+INSERT INTO Encomenda VALUES (5, 5, GETDATE(), 0.00);
+INSERT INTO Encomenda VALUES (6, 6, GETDATE(), 0.00);
+INSERT INTO Encomenda VALUES (7, 7, GETDATE(), 0.00);
+INSERT INTO Encomenda VALUES (8, 8, GETDATE(), 0.00);
+
+-- Adding more line items to orders
+INSERT INTO LinhaEnc VALUES (5, 5, 1);
+INSERT INTO LinhaEnc VALUES (5, 6, 2);
+INSERT INTO LinhaEnc VALUES (6, 7, 3);
+INSERT INTO LinhaEnc VALUES (6, 8, 1);
+INSERT INTO LinhaEnc VALUES (7, 5, 2);
+INSERT INTO LinhaEnc VALUES (7, 6, 1);
+INSERT INTO LinhaEnc VALUES (8, 7, 3);
+INSERT INTO LinhaEnc VALUES (8, 8, 2);
