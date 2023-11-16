@@ -79,24 +79,6 @@ namespace SimpleDataApp
             }
 
         }
-        private void Form2_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            DialogResult result = MessageBox.Show("Queres fechar? Vais perder as cenas", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (result == DialogResult.No)
-            {
-                e.Cancel = true;
-            }
-            else
-            {
-                // Close the SqlConnection when the form is closing
-                if (connection != null && connection.State == ConnectionState.Open)
-                {
-                    connection.Close();
-                }
-            }
-
-        }
-
+     
     }
 }
