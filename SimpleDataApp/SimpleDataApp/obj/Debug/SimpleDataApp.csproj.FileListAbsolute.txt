@@ -1,0 +1,16 @@
+C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\bin\Debug\SimpleDataApp.exe.config
+C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\bin\Debug\SimpleDataApp.exe
+C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\bin\Debug\SimpleDataApp.pdb
+C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.csproj.AssemblyReference.cache
+C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.Form1.resources
+C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.Properties.Resources.resources
+C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.csproj.GenerateResource.cache
+C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.csproj.CoreCompileInputs.cache
+C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.exe
+C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.pdb
+C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.Form2.resources
+C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\bin\Debug\EntityFramework.dll
+C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\bin\Debug\EntityFramework.xml
+C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.csproj.CopyComplete
