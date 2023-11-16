@@ -42,6 +42,7 @@ namespace SimpleDataApp
                 {
                     connection.Open();
                     Form2 form2 = new Form2();
+                    form2.FormClosed += Form2_FormClosed; // Attach the event handler
                     form2.Show();
                     this.Hide();
                 }

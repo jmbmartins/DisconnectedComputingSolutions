@@ -14,3 +14,19 @@ C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho
 C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\bin\Debug\EntityFramework.xml
 C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.csproj.CopyComplete
+C:\Users\fabio\Source\Repos\SSMS-DisconnectedModel\SimpleDataApp\SimpleDataApp\bin\Debug\SimpleDataApp.exe.config
+C:\Users\fabio\Source\Repos\SSMS-DisconnectedModel\SimpleDataApp\SimpleDataApp\bin\Debug\SimpleDataApp.exe
+C:\Users\fabio\Source\Repos\SSMS-DisconnectedModel\SimpleDataApp\SimpleDataApp\bin\Debug\SimpleDataApp.pdb
+C:\Users\fabio\Source\Repos\SSMS-DisconnectedModel\SimpleDataApp\SimpleDataApp\bin\Debug\EntityFramework.dll
+C:\Users\fabio\Source\Repos\SSMS-DisconnectedModel\SimpleDataApp\SimpleDataApp\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\fabio\Source\Repos\SSMS-DisconnectedModel\SimpleDataApp\SimpleDataApp\bin\Debug\EntityFramework.xml
+C:\Users\fabio\Source\Repos\SSMS-DisconnectedModel\SimpleDataApp\SimpleDataApp\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\fabio\Source\Repos\SSMS-DisconnectedModel\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.csproj.AssemblyReference.cache
+C:\Users\fabio\Source\Repos\SSMS-DisconnectedModel\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.Form1.resources
+C:\Users\fabio\Source\Repos\SSMS-DisconnectedModel\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.Form2.resources
+C:\Users\fabio\Source\Repos\SSMS-DisconnectedModel\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.Properties.Resources.resources
+C:\Users\fabio\Source\Repos\SSMS-DisconnectedModel\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.csproj.GenerateResource.cache
+C:\Users\fabio\Source\Repos\SSMS-DisconnectedModel\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.csproj.CoreCompileInputs.cache
+C:\Users\fabio\Source\Repos\SSMS-DisconnectedModel\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.csproj.CopyComplete
+C:\Users\fabio\Source\Repos\SSMS-DisconnectedModel\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.exe
+C:\Users\fabio\Source\Repos\SSMS-DisconnectedModel\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.pdb

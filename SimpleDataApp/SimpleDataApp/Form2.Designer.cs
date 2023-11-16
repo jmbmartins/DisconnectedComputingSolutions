@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Encomendagrid = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -36,12 +36,12 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.Updatebutton = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
-            this.button6 = new System.Windows.Forms.Button();
+            this.updateproductbutton = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.textBox5 = new System.Windows.Forms.TextBox();
@@ -50,19 +50,22 @@
             this.label6 = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.button5 = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.deletebutton = new System.Windows.Forms.Button();
+            this.Insertbutton = new System.Windows.Forms.Button();
+            this.EncLinhagrid = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.Encomendagrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.EncLinhagrid)).BeginInit();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // Encomendagrid
             // 
-            this.dataGridView1.AllowUserToOrderColumns = true;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 12);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(322, 524);
-            this.dataGridView1.TabIndex = 0;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            this.Encomendagrid.AllowUserToOrderColumns = true;
+            this.Encomendagrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Encomendagrid.Location = new System.Drawing.Point(12, 12);
+            this.Encomendagrid.Name = "Encomendagrid";
+            this.Encomendagrid.Size = new System.Drawing.Size(322, 524);
+            this.Encomendagrid.TabIndex = 0;
+            this.Encomendagrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // label1
             // 
@@ -121,14 +124,14 @@
             this.textBox3.Size = new System.Drawing.Size(100, 20);
             this.textBox3.TabIndex = 7;
             // 
-            // button1
+            // Updatebutton
             // 
-            this.button1.Location = new System.Drawing.Point(555, 184);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "Update";
-            this.button1.UseVisualStyleBackColor = true;
+            this.Updatebutton.Location = new System.Drawing.Point(555, 184);
+            this.Updatebutton.Name = "Updatebutton";
+            this.Updatebutton.Size = new System.Drawing.Size(75, 23);
+            this.Updatebutton.TabIndex = 8;
+            this.Updatebutton.Text = "Update";
+            this.Updatebutton.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
@@ -167,14 +170,14 @@
             this.label5.TabIndex = 12;
             this.label5.Text = "INSERT";
             // 
-            // button6
+            // updateproductbutton
             // 
-            this.button6.Location = new System.Drawing.Point(557, 419);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(75, 23);
-            this.button6.TabIndex = 15;
-            this.button6.Text = "Update";
-            this.button6.UseVisualStyleBackColor = true;
+            this.updateproductbutton.Location = new System.Drawing.Point(557, 419);
+            this.updateproductbutton.Name = "updateproductbutton";
+            this.updateproductbutton.Size = new System.Drawing.Size(75, 23);
+            this.updateproductbutton.TabIndex = 15;
+            this.updateproductbutton.Text = "Update";
+            this.updateproductbutton.UseVisualStyleBackColor = true;
             // 
             // label7
             // 
@@ -242,35 +245,55 @@
             this.label10.TabIndex = 21;
             this.label10.Text = "ID encomenda";
             // 
-            // button5
+            // deletebutton
             // 
-            this.button5.Location = new System.Drawing.Point(553, 280);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 14;
-            this.button5.Text = "Delete";
-            this.button5.UseVisualStyleBackColor = true;
+            this.deletebutton.Location = new System.Drawing.Point(553, 280);
+            this.deletebutton.Name = "deletebutton";
+            this.deletebutton.Size = new System.Drawing.Size(75, 23);
+            this.deletebutton.TabIndex = 14;
+            this.deletebutton.Text = "Delete";
+            this.deletebutton.UseVisualStyleBackColor = true;
+            // 
+            // Insertbutton
+            // 
+            this.Insertbutton.Location = new System.Drawing.Point(557, 70);
+            this.Insertbutton.Name = "Insertbutton";
+            this.Insertbutton.Size = new System.Drawing.Size(75, 23);
+            this.Insertbutton.TabIndex = 22;
+            this.Insertbutton.Text = "Insert";
+            this.Insertbutton.UseVisualStyleBackColor = true;
+            // 
+            // EncLinhagrid
+            // 
+            this.EncLinhagrid.AllowUserToOrderColumns = true;
+            this.EncLinhagrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.EncLinhagrid.Location = new System.Drawing.Point(736, 12);
+            this.EncLinhagrid.Name = "EncLinhagrid";
+            this.EncLinhagrid.Size = new System.Drawing.Size(322, 524);
+            this.EncLinhagrid.TabIndex = 23;
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(686, 547);
+            this.ClientSize = new System.Drawing.Size(1097, 547);
+            this.Controls.Add(this.EncLinhagrid);
+            this.Controls.Add(this.Insertbutton);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.textBox6);
             this.Controls.Add(this.textBox5);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.button6);
-            this.Controls.Add(this.button5);
+            this.Controls.Add(this.updateproductbutton);
+            this.Controls.Add(this.deletebutton);
             this.Controls.Add(this.textBox4);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.Updatebutton);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
@@ -278,11 +301,12 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.Encomendagrid);
             this.Name = "Form2";
             this.Text = "Form2";
             this.Load += new System.EventHandler(this.Form2_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Encomendagrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.EncLinhagrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -290,7 +314,7 @@
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView Encomendagrid;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
@@ -298,12 +322,12 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button Updatebutton;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button updateproductbutton;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox textBox5;
@@ -312,6 +336,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button deletebutton;
+        private System.Windows.Forms.Button Insertbutton;
+        private System.Windows.Forms.DataGridView EncLinhagrid;
     }
 }
