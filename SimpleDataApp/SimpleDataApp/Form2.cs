@@ -1,11 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -17,282 +15,263 @@ namespace SimpleDataApp
 
     public partial class Form2 : Form
     {
-        int selected_id = -1;
-        int selected_line = -1;
-        int selected_product = -1;
-        int rows_encomenda;
-        int rows_linhas;
-        string update_query = "";
-        int[] idencomendas;
-        int[] idclientes;
-        int[] idprodutos;
-
-        HashSet<int> changedRowsEnc;
-        HashSet<int> changedRowsEncLinha;
+        public SqlConnection connection = new SqlConnection(Form1.connectionString);
+     
 
 
+        void openConnection()
+        {
+            connection.Open();
+        }
+        void closeConnection()
+        {
+            connection.Close();
+        }
         public void fetchData()
         {
-            using (SqlConnection connection = new SqlConnection(Form1.connectionString))
+            string query = "SELECT * FROM Encomenda";
+            SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+            DataTable dataTable = new DataTable();
+
+            try
             {
-                string query = "SELECT * FROM Encomenda";
-                string query2 = "SELECT * FROM LinhaEnc";
-                string query3 = "SELECT ClienteId FROM Cliente";
-                string query4 = "SELECT ProdutoId FROM Produto";
+                connection.Open();
+                adapter.Fill(dataTable);
+                dataGridView1.DataSource = dataTable; // Binding the DataGridView to the DataTable
+                connection.Close() ;
 
-                SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-                SqlDataAdapter adapter2 = new SqlDataAdapter(query2, connection);
-                SqlDataAdapter adapter3 = new SqlDataAdapter(query3, connection);
-                SqlDataAdapter adapter4 = new SqlDataAdapter(query4, connection);
-
-                DataTable dataTable = new DataTable();
-                DataTable dataTable2 = new DataTable();
-                DataTable dataTable3 = new DataTable();
-                DataTable dataTable4 = new DataTable();
-                
-
-                try
-                {
-                    connection.Open();
-                    adapter.Fill(dataTable);
-                    adapter2.Fill(dataTable2);
-                    adapter3.Fill(dataTable3);
-                    adapter4.Fill(dataTable4);
-                    idclientes = new int[dataTable3.Rows.Count];
-                    idprodutos = new int[dataTable4.Rows.Count];
-                    idencomendas = new int[dataTable.Rows.Count];
-                    for (int i = 0; i < dataTable3.Rows.Count; i++)
-                    {
-                        idclientes[i] = Convert.ToInt32(dataTable3.Rows[i]["ClienteId"]);
-                    }
-                    for (int i = 0; i < dataTable4.Rows.Count; i++)
-                    {
-                        idprodutos[i] = Convert.ToInt32(dataTable4.Rows[i]["ProdutoId"]);
-                    }
-                    for (int i = 0; i < dataTable.Rows.Count; i++)
-                    {
-                        idencomendas[i] = Convert.ToInt32(dataTable.Rows[i]["EncId"]);
-                    }
-
-                    Encomendagrid.DataSource = dataTable; // Binding the DataGridView to the DataTable
-                    EncLinhagrid.DataSource = dataTable2;
-                    rows_encomenda = Encomendagrid.RowCount - 1;
-                    rows_linhas = EncLinhagrid.RowCount - 1;
-                    Encomendagrid.Columns[2].DefaultCellStyle.Format = "yyyy-MM-dd"; // Customize the format as needed
-
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
             }
         }
+        //muito obrigado ChatGPT 
+        private void SaveChangesToDatabase()
+        {
+            try
+            {
+                connection.Open();
+
+                foreach (DataGridViewRow row in dataGridView1.Rows)
+                {
+                    if (!row.IsNewRow)
+                    {
+                        string tableName = "Encomenda"; // Change this to other table names as needed
+
+                        string idColumnName = "EncId"; // Change this to other primary key column names as needed
+
+                        // Check if the row already exists in the database
+                        string checkQuery = $"SELECT COUNT(*) FROM {tableName} WHERE {idColumnName} = @{idColumnName}";
+                        SqlCommand checkCommand = new SqlCommand(checkQuery, connection);
+                        checkCommand.Parameters.AddWithValue($"@{idColumnName}", row.Cells[idColumnName].Value);
+
+                        int count = (int)checkCommand.ExecuteScalar();
+
+                        if (count > 0)
+                        {
+                            // Row already exists, perform an UPDATE
+                            string updateQuery = $"UPDATE {tableName} SET ";
+
+                            foreach (DataGridViewCell cell in row.Cells)
+                            {
+                                string columnName = cell.OwningColumn.Name;
+                                if (columnName != idColumnName) // Skip the primary key column in the update query
+                                {
+                                    updateQuery += $"{columnName} = @{columnName}, ";
+                                }
+                            }
+
+                            // Remove the trailing comma and space
+                            updateQuery = updateQuery.TrimEnd(',', ' ');
+
+                            updateQuery += $" WHERE {idColumnName} = @{idColumnName}";
+
+                            SqlCommand updateCommand = new SqlCommand(updateQuery, connection);
+
+                            foreach (DataGridViewCell cell in row.Cells)
+                            {
+                                string columnName = cell.OwningColumn.Name;
+                                if (columnName != idColumnName)
+                                {
+                                    updateCommand.Parameters.AddWithValue($"@{columnName}", cell.Value);
+                                }
+                            }
+
+                            updateCommand.Parameters.AddWithValue($"@{idColumnName}", row.Cells[idColumnName].Value);
+
+                            updateCommand.ExecuteNonQuery();
+                        }
+                        else
+                        {
+                            // Row doesn't exist, perform an INSERT
+                            string insertQuery = $"INSERT INTO {tableName} (";
+
+                            foreach (DataGridViewColumn column in dataGridView1.Columns)
+                            {
+                                insertQuery += $"{column.Name}, ";
+                            }
+
+                            // Remove the trailing comma and space
+                            insertQuery = insertQuery.TrimEnd(',', ' ');
+
+                            insertQuery += ") VALUES (";
+
+                            foreach (DataGridViewCell cell in row.Cells)
+                            {
+                                insertQuery += $"@{cell.OwningColumn.Name}, ";
+                            }
+
+                            // Remove the trailing comma and space
+                            insertQuery = insertQuery.TrimEnd(',', ' ');
+
+                            insertQuery += ")";
+
+                            SqlCommand insertCommand = new SqlCommand(insertQuery, connection);
+
+                            foreach (DataGridViewCell cell in row.Cells)
+                            {
+                                insertCommand.Parameters.AddWithValue($"@{cell.OwningColumn.Name}", cell.Value);
+                            }
+
+                            insertCommand.ExecuteNonQuery();
+                        }
+                    }
+                }
+
+                connection.Close();
+                fetchData(); // Refresh the DataGridView with updated data after saving to the database
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
+
+
         public Form2()
         {
             InitializeComponent();
-
-
-            // Crie um HashSet para armazenar os índices das linhas alteradas
-            changedRowsEnc = new HashSet<int>();
-
-            // Manipule o evento CellEndEdit
-            Encomendagrid.CellEndEdit += (s, e) => {
-                changedRowsEnc.Add(e.RowIndex);
-            };
-
-
-            // Crie um HashSet para armazenar os índices das linhas alteradas
-            changedRowsEncLinha = new HashSet<int>();
-
-            // Manipule o evento CellEndEdit
-            EncLinhagrid.CellEndEdit += (s, e) => {
-                changedRowsEncLinha.Add(e.RowIndex);
-            };
-
         }
 
-        private void Encomenda_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            int row = Encomendagrid.SelectedCells[0].RowIndex;
-            selected_id = (int)Encomendagrid.Rows[row].Cells[0].Value;
-        }
-        private void EncLinha_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            int row = EncLinhagrid.SelectedCells[0].RowIndex;
-            selected_line = (int)EncLinhagrid.Rows[row].Cells[0].Value;
-            selected_product = (int)EncLinhagrid.Rows[row].Cells[1].Value;
 
         }
-
 
         private void Form2_Load(object sender, EventArgs e)
         {
             fetchData();
+
+            domainUpDown1.Items.Add("Connected");
+            domainUpDown1.Items.Add("Disconnected");
+            domainUpDown1.Text = "Connected";
+
         }
 
-        private void cierra(object sender, EventArgs e)
+        private void button4_Click(object sender, EventArgs e)
         {
-            if (update_query != "")
-            {
-                // Check if the user really wants to close the form
-                DialogResult result = MessageBox.Show("Queres fechar? vais perder os updates", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            this.Close();
+        }
 
-                if (result == DialogResult.Yes)
+        private void button3_Click(object sender, EventArgs e)
+        {
+            closeConnection();  
+        }
+
+      
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            //UPDATE
+            if (domainUpDown1.Text== "Connected")
+            {
+                openConnection();
+                string updateQuery = "UPDATE Encomenda SET Total = " + textBox6.Text + " WHERE EncId = " + textBox5.Text + "";
+                SqlCommand command = new SqlCommand(updateQuery, connection);
+                command.ExecuteNonQuery();
+                connection.Close();
+
+                fetchData();
+            }
+            if (domainUpDown1.Text== "Disconnected")
+            {
+                int selectedIndex = dataGridView1.CurrentCell.RowIndex;
+
+                // Check if the selected row is valid
+                if (selectedIndex >= 0 && selectedIndex < dataGridView1.Rows.Count)
                 {
-                    System.Windows.Forms.Application.ExitThread();
+                    // Update the DataGridView cell with the new value
+                    dataGridView1.Rows[selectedIndex].Cells["Total"].Value = textBox6.Text;
                 }
             }
-        }
-        private void udpdatedb(object sender, EventArgs e)
-        {
-            if (update_query != "")
-            {
-                // Create a SqlConnection object
-                using (SqlConnection connection = new SqlConnection(Form1.connectionString))
-                {
-                    // Create a SqlCommand object with the delete query and connection
-                    using (SqlCommand command = new SqlCommand(update_query, connection))
-                    {
-                        try
-                        {
-                            // Open the database connection
-                            connection.Open();
-
-                            // Execute the delete query
-                            int rowsAffected = command.ExecuteNonQuery();
-
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.Write("Error SQL Query: " + update_query);
-                            MessageBox.Show("Error: " + ex.Message);
-                        }
-                    }
-                }
-                update_query = "";
-            }
-            fetchData();
-
-        }
-
-        private void deleter(object sender, EventArgs e)
-        {   //esta query apaga a encomenda, se a encomenda tiver linhas nao deixa ser apagada, mudar isto para apagar da linha primeiro
-            if (selected_id != -1)
-                update_query += "DELETE FROM Encomenda WHERE EncId = " + selected_id + "\n";
-        }
-        private void linedeleter(object sender, EventArgs e)
-        {
-            if (selected_line != -1)
-                update_query += "DELETE FROM LinhaEnc WHERE EncId = " + selected_line + " AND ProdutoId = " + selected_product + "\n";
-        }
-        private void Inserir_Encomendas(object sender, EventArgs e)
-        {
-            for (int i = rows_encomenda; i < Encomendagrid.RowCount - 1; i++)
-            {
-                if (idclientes.Contains((int)Encomendagrid.Rows[i].Cells[1].Value))
-                    if (!idencomendas.Contains((int)Encomendagrid.Rows[i].Cells[0].Value))
-                    {
-                        string value = Encomendagrid.Rows[i].Cells[3].Value.ToString();
-                        value = value.Replace(',', '.');
-
-                        DateTime dt = DateTime.ParseExact(Encomendagrid.Rows[i].Cells[2].Value.ToString(), "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-                        string sqlFormattedDate = dt.ToString("yyyy-MM-dd HH:mm:ss");
-
-                        string insertQuery = "INSERT INTO Encomenda (EncId, ClienteId, Data, Total) VALUES(" + Encomendagrid.Rows[i].Cells[0].Value.ToString() + ", " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", '" + sqlFormattedDate + "', " + value + "); ";
-
-                        if (!update_query.Contains(insertQuery))
-                            update_query += insertQuery;
-                    }
-                    else
-                        MessageBox.Show("Essa ecomenda já existe");
-                else
-                    MessageBox.Show("Esse cliente não existe");
-            }
-        }
-        private void Inserir_linhas(object sender, EventArgs e)
-        {
-            for (int i = rows_linhas; i < EncLinhagrid.RowCount - 1; i++)
-            {
-                if (idprodutos.Contains((int)EncLinhagrid.Rows[i].Cells[1].Value))
-                {
-                    if (idencomendas.Contains((int)EncLinhagrid.Rows[i].Cells[0].Value))
-                    {
-                        if (!update_query.Contains("INSERT INTO LinhaEnc (EncId, ProdutoId, Qtd) VALUES( " + EncLinhagrid.Rows[i].Cells[0].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[1].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[2].Value.ToString() + "); "))
-                            update_query += "INSERT INTO LinhaEnc (EncId, ProdutoId, Qtd) VALUES( " + EncLinhagrid.Rows[i].Cells[0].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[1].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[2].Value.ToString() + "); ";
-                    }
-                    else
-                        MessageBox.Show("Essa encomenda não existe");
-                }
-                else
-                    MessageBox.Show("Esse produto não existe");
-            }
-        }
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (update_query != "")
-            {
-                // Check if the user really wants to close the form
-                DialogResult result = MessageBox.Show("Queres fechar? vais perder os updates", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                if (result == DialogResult.No)
-                {
-                    // If the user clicked "No," cancel the form closing event
-                    e.Cancel = true;
-                }
-            }
-
-        }
+           
         
-        
-        private void btnUpdateE_Click(object sender, EventArgs e)
-        {
-                foreach (int i in changedRowsEnc)
-                {
-                    Debug.Write("Enc Changed row: " + i + "||");
-                    string value = Encomendagrid.Rows[i].Cells[3].Value.ToString();
-                    value = value.Replace(',', '.');
-
-                    DateTime dt = DateTime.ParseExact(Encomendagrid.Rows[i].Cells[2].Value.ToString(), "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-                    string sqlFormattedDate = dt.ToString("yyyy-MM-dd HH:mm:ss");
-
-                    update_query += "UPDATE Encomenda SET ClienteId = " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", Data = '" + sqlFormattedDate + "', Total = " + value + " WHERE EncId = " + Encomendagrid.Rows[i].Cells[0].Value.ToString() + "; ";
-                }
-
-                // Limpe o HashSet após a atualização
-                changedRowsEnc.Clear();
         }
 
-
-        private void btnUpdateP_Click(object sender, EventArgs e)
+        private void button5_Click(object sender, EventArgs e)
         {
-            foreach (int i in changedRowsEncLinha)
+
+
+            //DELETE
+
+            if (domainUpDown1.Text == "Connected")
             {
-                Debug.Write("Product Changed row " + i + "||");
-                update_query += "UPDATE LinhaEnc SET Qtd = " + EncLinhagrid.Rows[i].Cells[2].Value + " WHERE EncId = " + EncLinhagrid.Rows[i].Cells[0].Value + " AND ProdutoId = " + EncLinhagrid.Rows[i].Cells[1].Value + "; ";
+                connection.Open();
+                string deleteQuery = "DELETE FROM Encomenda WHERE EncId = " + textBox4.Text + " ";
+                SqlCommand command = new SqlCommand(deleteQuery, connection);
+                command.ExecuteNonQuery();
+                connection.Close();
+
+                fetchData();
+            }
+            if (domainUpDown1.Text == "Disconnected")
+            {
+                int selectedIndex = dataGridView1.CurrentCell.RowIndex;
+
+                // Check if the selected row is valid
+                if (selectedIndex >= 0 && selectedIndex < dataGridView1.Rows.Count)
+                {
+                    // Remove the selected row from the DataGridView
+                    dataGridView1.Rows.RemoveAt(selectedIndex);
+                }
+            }
+        }
+
+        private void InserirBtn_Click(object sender, EventArgs e)
+        {
+            //INSERT   
+            string dateString = dateTimePicker1.Text;
+            string deleteQuery = "";
+            if (domainUpDown1.Text == "Connected")
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(deleteQuery, connection);
+                command.ExecuteNonQuery();
+                connection.Close();
+
+                fetchData();
+            }
+            if (domainUpDown1.Text == "Disconnected")
+            {
+                if (DateTime.TryParse(dateString, out DateTime selectedDate))
+                {
+                    // Format the date to match SQL Server's date format
+                    string formattedDate = selectedDate.ToString("yyyy-MM-dd");
+                    deleteQuery = "INSERT INTO Encomenda(EncId , ClienteId, Data, Total) VALUES (" + textBox2.Text + ", '" + textBox1.Text + "', '" + formattedDate + "', " + textBox3.Text + ");";
+
+                    // Now you can use formattedDate in your SQL query
+                }
+                dataGridView1.Rows.Add(textBox2.Text, textBox1.Text, deleteQuery, textBox3.Text);
             }
 
-            // Limpe o HashSet após a atualização
-            changedRowsEncLinha.Clear();
         }
 
-        private void Updatebutton_Click(object sender, EventArgs e)
+        private void SendDataBtn_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void updateproductbutton_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label9_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
+            SaveChangesToDatabase();
+            
         }
     }
 }

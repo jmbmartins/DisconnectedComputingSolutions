@@ -24,13 +24,13 @@ namespace SimpleDataApp
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            domainHost.Text = "127.0.0.1";
+            textBox1.Text = "127.0.0.1";
             textBox2.Text = "Trab2_6";
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            hostName = domainHost.Text;
+            hostName = textBox1.Text;
             databaseName = textBox2.Text;
             username = textBox3.Text;
             String password = maskedTextBox1.Text;
@@ -56,16 +56,6 @@ namespace SimpleDataApp
         private void button2_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void domainHost_SelectedItemChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
