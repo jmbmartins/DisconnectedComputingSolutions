@@ -54,11 +54,11 @@ namespace SimpleDataApp
                     idprodutos = new int[dataTable4.Rows.Count];
                     for (int i = 0; i < dataTable3.Rows.Count; i++)
                     {
-                        idclientes[i] = Convert.ToInt32(dataTable.Rows[i]["ClienteId"]);
+                        idclientes[i] = Convert.ToInt32(dataTable3.Rows[i]["ClienteId"]);
                     }
                     for (int i = 0; i < dataTable4.Rows.Count; i++)
                     {
-                        idprodutos[i] = Convert.ToInt32(dataTable.Rows[i]["ProdutoId"]);
+                        idprodutos[i] = Convert.ToInt32(dataTable4.Rows[i]["ProdutoId"]);
                     }
                     Encomendagrid.DataSource = dataTable; // Binding the DataGridView to the DataTable
                     EncLinhagrid.DataSource = dataTable2;
