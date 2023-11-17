@@ -164,11 +164,16 @@ namespace SimpleDataApp
         {
             for (int i = rows_encomenda; i < Encomendagrid.RowCount - 1; i++)
             {
-                if(idclientes.Contains((int)Encomendagrid.Rows[i].Cells[1].Value))
-                    if(!idencomendas.Contains((int)Encomendagrid.Rows[i].Cells[0].Value))
-                        update_query += "INSERT INTO Encomenda (EncId, ClienteId, Data, Total) VALUES(" + Encomendagrid.Rows[i].Cells[0].Value.ToString() + ", " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", \'" + Encomendagrid.Rows[i].Cells[2].Value.ToString() + "\', " + Encomendagrid.Rows[i].Cells[3].Value.ToString() + "); ";
+                if (idclientes.Contains((int)Encomendagrid.Rows[i].Cells[1].Value))
+                    if (!idencomendas.Contains((int)Encomendagrid.Rows[i].Cells[0].Value))
+                    {
+                        if (!update_query.Contains("INSERT INTO Encomenda (EncId, ClienteId, Data, Total) VALUES(" + Encomendagrid.Rows[i].Cells[0].Value.ToString() + ", " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", \'" + Encomendagrid.Rows[i].Cells[2].Value.ToString() + "\', " + Encomendagrid.Rows[i].Cells[3].Value.ToString() + "); "))
+                            update_query += "INSERT INTO Encomenda (EncId, ClienteId, Data, Total) VALUES(" + Encomendagrid.Rows[i].Cells[0].Value.ToString() + ", " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", \'" + Encomendagrid.Rows[i].Cells[2].Value.ToString() + "\', " + Encomendagrid.Rows[i].Cells[3].Value.ToString() + "); ";
+                        else
+                            MessageBox.Show("muy bien :)");
+                    }
                     else
-                    MessageBox.Show("Essa ecomenda já existe");
+                        MessageBox.Show("Essa ecomenda já existe");
                 else
                     MessageBox.Show("Esse cliente não existe");
             }
@@ -179,8 +184,11 @@ namespace SimpleDataApp
             {
                 if (idprodutos.Contains((int)EncLinhagrid.Rows[i].Cells[1].Value))
                 {
-                    if(idencomendas.Contains((int)EncLinhagrid.Rows[i].Cells[0].Value))
-                        update_query += "INSERT INTO LinhaEnc (EncId, ProdutoId, Qtd) VALUES( " + EncLinhagrid.Rows[i].Cells[0].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[1].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[2].Value.ToString() + "); ";
+                    if (idencomendas.Contains((int)EncLinhagrid.Rows[i].Cells[0].Value))
+                    {
+                        if (!update_query.Contains("INSERT INTO LinhaEnc (EncId, ProdutoId, Qtd) VALUES( " + EncLinhagrid.Rows[i].Cells[0].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[1].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[2].Value.ToString() + "); "))
+                            update_query += "INSERT INTO LinhaEnc (EncId, ProdutoId, Qtd) VALUES( " + EncLinhagrid.Rows[i].Cells[0].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[1].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[2].Value.ToString() + "); ";
+                    }
                     else
                         MessageBox.Show("Essa encomenda não existe");
                 }
@@ -205,7 +213,7 @@ namespace SimpleDataApp
         }
         private void btnUpdateE_Click(object sender, EventArgs e)
         {
-            for (int i = rows_encomenda; i < Encomendagrid.RowCount - 1; i++)
+            for (int i = 0; i < Encomendagrid.RowCount - 1; i++)
             {
                 update_query += "UPDATE Encomenda SET ClienteId = " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", Data = " + Encomendagrid.Rows[i].Cells[2].Value.ToString() + ", Total = " + Encomendagrid.Rows[i].Cells[3].Value.ToString() + "WHERE EncId = " + Encomendagrid.Rows[i].Cells[0].Value.ToString() + "; ";
             }
@@ -216,7 +224,7 @@ namespace SimpleDataApp
 
         private void btnUpdateP_Click(object sender, EventArgs e)
         {
-            for (int i = rows_linhas; i < EncLinhagrid.RowCount - 1; i++)
+            for (int i = 0; i < EncLinhagrid.RowCount - 1; i++)
             {
                 update_query += "UPDATE LinhaEnc SET Qtd = " + EncLinhagrid.Rows[i].Cells[2].Value + "WHERE EncId = " + EncLinhagrid.Rows[i].Cells[0].Value + " AND ProdutoId = " + EncLinhagrid.Rows[i].Cells[1].Value + "; ";
             }
