@@ -41,6 +41,7 @@ namespace SimpleDataApp
                     EncLinhagrid.DataSource = dataTable2;
                     rows_encomenda = Encomendagrid.RowCount - 1;
                     rows_linhas = EncLinhagrid.RowCount - 1;
+                    Encomendagrid.Columns[2].DefaultCellStyle.Format = "yyyy-MM-dd"; // Customize the format as needed
 
                 }
                 catch (Exception ex)
@@ -132,14 +133,7 @@ namespace SimpleDataApp
         {
             for (int i = rows_encomenda; i < Encomendagrid.RowCount - 1; i++)
             {
-                // Original date and time string
-                string dateString = Encomendagrid.Rows[i].Cells[2].Value.ToString();
-
-                // Convert the string to a DateTime object
-                if (DateTime.TryParseExact(dateString, "dd-MMM-yy HH:mm:ss", null, DateTimeStyles.None, out DateTime dateTime))
-                {
-                    update_query += "INSERT INTO Encomenda (EncId, ClienteId, Data, Total) VALUES(" + Encomendagrid.Rows[i].Cells[0].Value.ToString() + ", " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", \'" + dateTime.ToString("yyyy-MM-dd") + "\', " + Encomendagrid.Rows[i].Cells[3].Value.ToString() + "); ";
-                }
+                    update_query += "INSERT INTO Encomenda (EncId, ClienteId, Data, Total) VALUES(" + Encomendagrid.Rows[i].Cells[0].Value.ToString() + ", " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", \'" + Encomendagrid.Rows[i].Cells[2].Value.ToString() + "\', " + Encomendagrid.Rows[i].Cells[3].Value.ToString() + "); ";
             }
         }
 
