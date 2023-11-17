@@ -22,6 +22,7 @@ namespace SimpleDataApp
         int rows_encomenda;
         int rows_linhas;
         string update_query = "";
+        int[] idencomendas;
         int[] idclientes;
         int[] idprodutos;
         public void fetchData()
@@ -42,6 +43,7 @@ namespace SimpleDataApp
                 DataTable dataTable2 = new DataTable();
                 DataTable dataTable3 = new DataTable();
                 DataTable dataTable4 = new DataTable();
+                
 
                 try
                 {
@@ -52,6 +54,7 @@ namespace SimpleDataApp
                     adapter4.Fill(dataTable4);
                     idclientes = new int[dataTable3.Rows.Count];
                     idprodutos = new int[dataTable4.Rows.Count];
+                    idencomendas = new int[dataTable.Rows.Count];
                     for (int i = 0; i < dataTable3.Rows.Count; i++)
                     {
                         idclientes[i] = Convert.ToInt32(dataTable3.Rows[i]["ClienteId"]);
@@ -60,6 +63,11 @@ namespace SimpleDataApp
                     {
                         idprodutos[i] = Convert.ToInt32(dataTable4.Rows[i]["ProdutoId"]);
                     }
+                    for (int i = 0; i < dataTable.Rows.Count; i++)
+                    {
+                        idencomendas[i] = Convert.ToInt32(dataTable.Rows[i]["EncId"]);
+                    }
+
                     Encomendagrid.DataSource = dataTable; // Binding the DataGridView to the DataTable
                     EncLinhagrid.DataSource = dataTable2;
                     rows_encomenda = Encomendagrid.RowCount - 1;
@@ -167,9 +175,9 @@ namespace SimpleDataApp
         {
             for (int i = rows_linhas; i < EncLinhagrid.RowCount - 1; i++)
             {
-                if (idprodutos.Contains((int)EncLinhagrid.Rows[i].Cells[1].Value))
+                if (idprodutos.Contains((int)EncLinhagrid.Rows[i].Cells[1].Value) && idencomendas.Contains((int)EncLinhagrid.Rows[i].Cells[0].Value))
                     update_query += "INSERT INTO LinhaEnc (EncId, ProdutoId, Qtd) VALUES( " + EncLinhagrid.Rows[i].Cells[0].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[1].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[2].Value.ToString() + "); ";
-                MessageBox.Show("Esse produto não existe");
+                MessageBox.Show("Esse produto/encomenda não existe");
             }
         }
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
