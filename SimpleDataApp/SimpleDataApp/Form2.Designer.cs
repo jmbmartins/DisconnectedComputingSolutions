@@ -37,7 +37,6 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.Updatebutton = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
@@ -48,11 +47,10 @@
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
             this.deletebutton = new System.Windows.Forms.Button();
             this.Insertbutton = new System.Windows.Forms.Button();
             this.EncLinhagrid = new System.Windows.Forms.DataGridView();
+            this.deleteenclinha = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Encomendagrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.EncLinhagrid)).BeginInit();
             this.SuspendLayout();
@@ -65,7 +63,7 @@
             this.Encomendagrid.Name = "Encomendagrid";
             this.Encomendagrid.Size = new System.Drawing.Size(322, 524);
             this.Encomendagrid.TabIndex = 0;
-            this.Encomendagrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            this.Encomendagrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Encomenda_CellContentClick);
             // 
             // label1
             // 
@@ -133,23 +131,15 @@
             this.Updatebutton.Text = "Update";
             this.Updatebutton.UseVisualStyleBackColor = true;
             // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(432, 12);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 9;
-            this.button2.Text = "Connect";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(557, 12);
+            this.button3.Location = new System.Drawing.Point(490, 12);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 10;
-            this.button3.Text = "Disconnect";
+            this.button3.Text = "Update db";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.udpdatedb);
             // 
             // button4
             // 
@@ -159,7 +149,7 @@
             this.button4.TabIndex = 11;
             this.button4.Text = "Exit";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.button4.Click += new System.EventHandler(this.cierra);
             // 
             // label5
             // 
@@ -229,30 +219,15 @@
             this.label6.TabIndex = 12;
             this.label6.Text = "DELETE";
             // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(428, 283);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 20);
-            this.textBox4.TabIndex = 13;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(342, 286);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(77, 13);
-            this.label10.TabIndex = 21;
-            this.label10.Text = "ID encomenda";
-            // 
             // deletebutton
             // 
-            this.deletebutton.Location = new System.Drawing.Point(553, 280);
+            this.deletebutton.Location = new System.Drawing.Point(340, 282);
             this.deletebutton.Name = "deletebutton";
             this.deletebutton.Size = new System.Drawing.Size(75, 23);
             this.deletebutton.TabIndex = 14;
             this.deletebutton.Text = "Delete";
             this.deletebutton.UseVisualStyleBackColor = true;
+            this.deletebutton.Click += new System.EventHandler(this.deleter);
             // 
             // Insertbutton
             // 
@@ -271,15 +246,26 @@
             this.EncLinhagrid.Name = "EncLinhagrid";
             this.EncLinhagrid.Size = new System.Drawing.Size(322, 524);
             this.EncLinhagrid.TabIndex = 23;
+            this.EncLinhagrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.EncLinha_CellContentClick);
+            // 
+            // deleteenclinha
+            // 
+            this.deleteenclinha.Location = new System.Drawing.Point(639, 282);
+            this.deleteenclinha.Name = "deleteenclinha";
+            this.deleteenclinha.Size = new System.Drawing.Size(75, 23);
+            this.deleteenclinha.TabIndex = 24;
+            this.deleteenclinha.Text = "Delete";
+            this.deleteenclinha.UseVisualStyleBackColor = true;
+            this.deleteenclinha.Click += new System.EventHandler(this.linedeleter);
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1097, 547);
+            this.Controls.Add(this.deleteenclinha);
             this.Controls.Add(this.EncLinhagrid);
             this.Controls.Add(this.Insertbutton);
-            this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.textBox6);
             this.Controls.Add(this.textBox5);
@@ -287,12 +273,10 @@
             this.Controls.Add(this.label7);
             this.Controls.Add(this.updateproductbutton);
             this.Controls.Add(this.deletebutton);
-            this.Controls.Add(this.textBox4);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.Updatebutton);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.textBox2);
@@ -304,6 +288,7 @@
             this.Controls.Add(this.Encomendagrid);
             this.Name = "Form2";
             this.Text = "Form2";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form2_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Encomendagrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.EncLinhagrid)).EndInit();
@@ -323,7 +308,6 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Button Updatebutton;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Label label5;
@@ -334,10 +318,9 @@
         private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button deletebutton;
         private System.Windows.Forms.Button Insertbutton;
         private System.Windows.Forms.DataGridView EncLinhagrid;
+        private System.Windows.Forms.Button deleteenclinha;
     }
 }
