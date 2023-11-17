@@ -51,7 +51,7 @@ namespace SimpleDataApp
                     adapter3.Fill(dataTable3);
                     adapter4.Fill(dataTable4);
                     idclientes = new int[dataTable3.Rows.Count];
-                    idprodutos = new int[dataTable3.Rows.Count];
+                    idprodutos = new int[dataTable4.Rows.Count];
                     for (int i = 0; i < dataTable3.Rows.Count; i++)
                     {
                         idclientes[i] = Convert.ToInt32(dataTable.Rows[i]["ClienteId"]);
