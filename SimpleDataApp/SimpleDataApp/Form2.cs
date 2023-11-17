@@ -219,19 +219,16 @@ namespace SimpleDataApp
             }
 
         }
-        private void btnUpdateE_Click(object sender, EventArgs e)
+          private void btnUpdateE_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < Encomendagrid.RowCount - 1; i++)
             {
-                string value = Encomendagrid.Rows[i].Cells[3].Value.ToString();
-                value = value.Replace(',', '.');
-
-                DateTime dt = DateTime.ParseExact(Encomendagrid.Rows[i].Cells[2].Value.ToString(), "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-                string sqlFormattedDate = dt.ToString("yyyy-MM-dd HH:mm:ss");
-
-                update_query += "UPDATE Encomenda SET ClienteId = " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", Data = '" + sqlFormattedDate + "', Total = " + value + " WHERE EncId = " + Encomendagrid.Rows[i].Cells[0].Value.ToString() + "; ";
+                System.DateTime Date = (System.DateTime)Encomendagrid.Rows[i].Cells[2].Value;
+                string data = Date.Year.ToString() + '-' + Date.Month.ToString() + '-' + Date.Day.ToString();
+                update_query += "UPDATE Encomenda SET ClienteId = " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", Data = \'" + data + "\', Total = " + Encomendagrid.Rows[i].Cells[3].Value.ToString() + "WHERE EncId = " + Encomendagrid.Rows[i].Cells[0].Value.ToString() + "; ";
             }
         }
+
 
 
 
