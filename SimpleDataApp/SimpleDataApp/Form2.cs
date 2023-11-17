@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,28 +17,49 @@ namespace SimpleDataApp
     public partial class Form2 : Form
     {
         int selected_id = -1;
-
-
         int selected_line = -1;
         int selected_product = -1;
         int rows_encomenda;
         int rows_linhas;
         string update_query = "";
+        int[] idclientes;
+        int[] idprodutos;
         public void fetchData()
         {
             using (SqlConnection connection = new SqlConnection(Form1.connectionString))
             {
                 string query = "SELECT * FROM Encomenda";
                 string query2 = "SELECT * FROM LinhaEnc";
+                string query3 = "SELECT ClienteId FROM Cliente";
+                string query4 = "SELECT ProdutoId FROM Produto";
+
                 SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
                 SqlDataAdapter adapter2 = new SqlDataAdapter(query2, connection);
+                SqlDataAdapter adapter3 = new SqlDataAdapter(query3, connection);
+                SqlDataAdapter adapter4 = new SqlDataAdapter(query4, connection);
+
                 DataTable dataTable = new DataTable();
                 DataTable dataTable2 = new DataTable();
+                DataTable dataTable3 = new DataTable();
+                DataTable dataTable4 = new DataTable();
+
                 try
                 {
                     connection.Open();
                     adapter.Fill(dataTable);
                     adapter2.Fill(dataTable2);
+                    adapter3.Fill(dataTable3);
+                    adapter4.Fill(dataTable4);
+                    idclientes = new int[dataTable3.Rows.Count];
+                    idprodutos = new int[dataTable3.Rows.Count];
+                    for (int i = 0; i < dataTable3.Rows.Count; i++)
+                    {
+                        idclientes[i] = Convert.ToInt32(dataTable.Rows[i]["ClienteId"]);
+                    }
+                    for (int i = 0; i < dataTable4.Rows.Count; i++)
+                    {
+                        idprodutos[i] = Convert.ToInt32(dataTable.Rows[i]["ProdutoId"]);
+                    }
                     Encomendagrid.DataSource = dataTable; // Binding the DataGridView to the DataTable
                     EncLinhagrid.DataSource = dataTable2;
                     rows_encomenda = Encomendagrid.RowCount - 1;
@@ -131,12 +152,14 @@ namespace SimpleDataApp
             if (selected_line != -1)
                 update_query += "DELETE FROM LinhaEnc WHERE EncId = " + selected_line + " AND ProdutoId = " + selected_product + "\n";
         }
-
         private void Inserir_Encomendas(object sender, EventArgs e)
         {
             for (int i = rows_encomenda; i < Encomendagrid.RowCount - 1; i++)
             {
+                if(idclientes.Contains((int)Encomendagrid.Rows[i].Cells[1].Value))
                     update_query += "INSERT INTO Encomenda (EncId, ClienteId, Data, Total) VALUES(" + Encomendagrid.Rows[i].Cells[0].Value.ToString() + ", " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", \'" + Encomendagrid.Rows[i].Cells[2].Value.ToString() + "\', " + Encomendagrid.Rows[i].Cells[3].Value.ToString() + "); ";
+                else
+                    MessageBox.Show("Esse cliente não existe");
             }
         }
 
@@ -144,10 +167,26 @@ namespace SimpleDataApp
         {
             for (int i = rows_linhas; i < EncLinhagrid.RowCount - 1; i++)
             {
-                update_query += "INSERT INTO LinhaEnc (EncId, ProdutoId, Qtd) VALUES( " + EncLinhagrid.Rows[i].Cells[0].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[1].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[2].Value.ToString() + "); ";
+                if (idprodutos.Contains((int)EncLinhagrid.Rows[i].Cells[1].Value))
+                    update_query += "INSERT INTO LinhaEnc (EncId, ProdutoId, Qtd) VALUES( " + EncLinhagrid.Rows[i].Cells[0].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[1].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[2].Value.ToString() + "); ";
+                MessageBox.Show("Esse produto não existe");
             }
         }
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (update_query != "")
+            {
+                // Check if the user really wants to close the form
+                DialogResult result = MessageBox.Show("Queres fechar? vais perder os updates", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
+                if (result == DialogResult.No)
+                {
+                    // If the user clicked "No," cancel the form closing event
+                    e.Cancel = true;
+                }
+            }
+
+        }
         private void btnUpdateE_Click(object sender, EventArgs e)
         {
             for (int i = rows_encomenda; i < Encomendagrid.RowCount - 1; i++)
@@ -166,24 +205,6 @@ namespace SimpleDataApp
                 update_query += "UPDATE LinhaEnc SET Qtd = " + EncLinhagrid.Rows[i].Cells[2].Value + "WHERE EncId = " + EncLinhagrid.Rows[i].Cells[0].Value + " AND ProdutoId = " + EncLinhagrid.Rows[i].Cells[1].Value + "; ";
             }
         }
-
-
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (update_query != "")
-            {
-                // Check if the user really wants to close the form
-                DialogResult result = MessageBox.Show("Queres fechar? vais perder os updates", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                if (result == DialogResult.No)
-                {
-                    // If the user clicked "No," cancel the form closing event
-                    e.Cancel = true;
-                }
-            }
-
-        }
-
         private void Updatebutton_Click(object sender, EventArgs e)
         {
 
@@ -203,7 +224,5 @@ namespace SimpleDataApp
         {
 
         }
-
-       
     }
 }
