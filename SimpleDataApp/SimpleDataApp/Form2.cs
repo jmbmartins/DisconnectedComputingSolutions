@@ -169,8 +169,16 @@ namespace SimpleDataApp
                 if (idclientes.Contains((int)Encomendagrid.Rows[i].Cells[1].Value))
                     if (!idencomendas.Contains((int)Encomendagrid.Rows[i].Cells[0].Value))
                     {
-                        if (!update_query.Contains("INSERT INTO Encomenda (EncId, ClienteId, Data, Total) VALUES(" + Encomendagrid.Rows[i].Cells[0].Value.ToString() + ", " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", \'" + Encomendagrid.Rows[i].Cells[2].Value.ToString() + "\', " + Encomendagrid.Rows[i].Cells[3].Value.ToString() + "); "))
-                            update_query += "INSERT INTO Encomenda (EncId, ClienteId, Data, Total) VALUES(" + Encomendagrid.Rows[i].Cells[0].Value.ToString() + ", " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", \'" + Encomendagrid.Rows[i].Cells[2].Value.ToString() + "\', " + Encomendagrid.Rows[i].Cells[3].Value.ToString() + "); ";
+                        string value = Encomendagrid.Rows[i].Cells[3].Value.ToString();
+                        value = value.Replace(',', '.');
+
+                        DateTime dt = DateTime.ParseExact(Encomendagrid.Rows[i].Cells[2].Value.ToString(), "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                        string sqlFormattedDate = dt.ToString("yyyy-MM-dd HH:mm:ss");
+
+                        string insertQuery = "INSERT INTO Encomenda (EncId, ClienteId, Data, Total) VALUES(" + Encomendagrid.Rows[i].Cells[0].Value.ToString() + ", " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", '" + sqlFormattedDate + "', " + value + "); ";
+
+                        if (!update_query.Contains(insertQuery))
+                            update_query += insertQuery;
                     }
                     else
                         MessageBox.Show("Essa ecomenda já existe");
