@@ -165,19 +165,27 @@ namespace SimpleDataApp
             for (int i = rows_encomenda; i < Encomendagrid.RowCount - 1; i++)
             {
                 if(idclientes.Contains((int)Encomendagrid.Rows[i].Cells[1].Value))
-                    update_query += "INSERT INTO Encomenda (EncId, ClienteId, Data, Total) VALUES(" + Encomendagrid.Rows[i].Cells[0].Value.ToString() + ", " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", \'" + Encomendagrid.Rows[i].Cells[2].Value.ToString() + "\', " + Encomendagrid.Rows[i].Cells[3].Value.ToString() + "); ";
+                    if(!idencomendas.Contains((int)Encomendagrid.Rows[i].Cells[0].Value))
+                        update_query += "INSERT INTO Encomenda (EncId, ClienteId, Data, Total) VALUES(" + Encomendagrid.Rows[i].Cells[0].Value.ToString() + ", " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", \'" + Encomendagrid.Rows[i].Cells[2].Value.ToString() + "\', " + Encomendagrid.Rows[i].Cells[3].Value.ToString() + "); ";
+                    else
+                    MessageBox.Show("Essa ecomenda já existe");
                 else
                     MessageBox.Show("Esse cliente não existe");
             }
         }
-
         private void Inserir_linhas(object sender, EventArgs e)
         {
             for (int i = rows_linhas; i < EncLinhagrid.RowCount - 1; i++)
             {
-                if (idprodutos.Contains((int)EncLinhagrid.Rows[i].Cells[1].Value) && idencomendas.Contains((int)EncLinhagrid.Rows[i].Cells[0].Value))
-                    update_query += "INSERT INTO LinhaEnc (EncId, ProdutoId, Qtd) VALUES( " + EncLinhagrid.Rows[i].Cells[0].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[1].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[2].Value.ToString() + "); ";
-                MessageBox.Show("Esse produto/encomenda não existe");
+                if (idprodutos.Contains((int)EncLinhagrid.Rows[i].Cells[1].Value))
+                {
+                    if(idencomendas.Contains((int)EncLinhagrid.Rows[i].Cells[0].Value))
+                        update_query += "INSERT INTO LinhaEnc (EncId, ProdutoId, Qtd) VALUES( " + EncLinhagrid.Rows[i].Cells[0].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[1].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[2].Value.ToString() + "); ";
+                    else
+                        MessageBox.Show("Essa encomenda não existe");
+                }
+                else
+                    MessageBox.Show("Esse produto não existe");
             }
         }
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
