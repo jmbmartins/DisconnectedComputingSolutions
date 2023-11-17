@@ -17,6 +17,8 @@ namespace SimpleDataApp
     public partial class Form2 : Form
     {
         int selected_id = -1;
+
+
         int selected_line = -1;
         int selected_product = -1;
         int rows_encomenda;
@@ -129,6 +131,7 @@ namespace SimpleDataApp
             if (selected_line != -1)
                 update_query += "DELETE FROM LinhaEnc WHERE EncId = " + selected_line + " AND ProdutoId = " + selected_product + "\n";
         }
+
         private void Inserir_Encomendas(object sender, EventArgs e)
         {
             for (int i = rows_encomenda; i < Encomendagrid.RowCount - 1; i++)
@@ -144,6 +147,27 @@ namespace SimpleDataApp
                 update_query += "INSERT INTO LinhaEnc (EncId, ProdutoId, Qtd) VALUES( " + EncLinhagrid.Rows[i].Cells[0].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[1].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[2].Value.ToString() + "); ";
             }
         }
+
+        private void btnUpdateE_Click(object sender, EventArgs e)
+        {
+            for (int i = rows_encomenda; i < Encomendagrid.RowCount - 1; i++)
+            {
+                update_query += "UPDATE Encomenda SET ClienteId = " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", Data = " + Encomendagrid.Rows[i].Cells[2].Value.ToString() + ", Total = " + Encomendagrid.Rows[i].Cells[3].Value.ToString() + "WHERE EncId = " + Encomendagrid.Rows[i].Cells[0].Value.ToString() + "; ";
+            }
+        }
+
+
+
+
+        private void btnUpdateP_Click(object sender, EventArgs e)
+        {
+            for (int i = rows_linhas; i < EncLinhagrid.RowCount - 1; i++)
+            {
+                update_query += "UPDATE LinhaEnc SET Qtd = " + EncLinhagrid.Rows[i].Cells[2].Value + "WHERE EncId = " + EncLinhagrid.Rows[i].Cells[0].Value + " AND ProdutoId = " + EncLinhagrid.Rows[i].Cells[1].Value + "; ";
+            }
+        }
+
+
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (update_query != "")
@@ -179,5 +203,7 @@ namespace SimpleDataApp
         {
 
         }
+
+       
     }
 }
