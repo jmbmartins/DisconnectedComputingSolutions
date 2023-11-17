@@ -166,5 +166,14 @@ namespace SimpleDataApp
 
         }
 
+        private void Updatebutton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void updateproductbutton_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
