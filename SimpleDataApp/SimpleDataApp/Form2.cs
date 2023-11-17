@@ -26,6 +26,11 @@ namespace SimpleDataApp
         int[] idencomendas;
         int[] idclientes;
         int[] idprodutos;
+
+        HashSet<int> changedRowsEnc;
+        HashSet<int> changedRowsEncLinha;
+
+
         public void fetchData()
         {
             using (SqlConnection connection = new SqlConnection(Form1.connectionString))
@@ -85,6 +90,24 @@ namespace SimpleDataApp
         public Form2()
         {
             InitializeComponent();
+
+
+            // Crie um HashSet para armazenar os índices das linhas alteradas
+            changedRowsEnc = new HashSet<int>();
+
+            // Manipule o evento CellEndEdit
+            Encomendagrid.CellEndEdit += (s, e) => {
+                changedRowsEnc.Add(e.RowIndex);
+            };
+
+
+            // Crie um HashSet para armazenar os índices das linhas alteradas
+            changedRowsEncLinha = new HashSet<int>();
+
+            // Manipule o evento CellEndEdit
+            EncLinhagrid.CellEndEdit += (s, e) => {
+                changedRowsEncLinha.Add(e.RowIndex);
+            };
 
         }
 
@@ -219,29 +242,39 @@ namespace SimpleDataApp
             }
 
         }
+        
+        
         private void btnUpdateE_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < Encomendagrid.RowCount - 1; i++)
-            {
-                string value = Encomendagrid.Rows[i].Cells[3].Value.ToString();
-                value = value.Replace(',', '.');
+                foreach (int i in changedRowsEnc)
+                {
+                    Debug.Write("Enc Changed row: " + i + "||");
+                    string value = Encomendagrid.Rows[i].Cells[3].Value.ToString();
+                    value = value.Replace(',', '.');
 
-                DateTime dt = DateTime.ParseExact(Encomendagrid.Rows[i].Cells[2].Value.ToString(), "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-                string sqlFormattedDate = dt.ToString("yyyy-MM-dd HH:mm:ss");
+                    DateTime dt = DateTime.ParseExact(Encomendagrid.Rows[i].Cells[2].Value.ToString(), "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                    string sqlFormattedDate = dt.ToString("yyyy-MM-dd HH:mm:ss");
 
-                update_query += "UPDATE Encomenda SET ClienteId = " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", Data = '" + sqlFormattedDate + "', Total = " + value + " WHERE EncId = " + Encomendagrid.Rows[i].Cells[0].Value.ToString() + "; ";
-            }
+                    update_query += "UPDATE Encomenda SET ClienteId = " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", Data = '" + sqlFormattedDate + "', Total = " + value + " WHERE EncId = " + Encomendagrid.Rows[i].Cells[0].Value.ToString() + "; ";
+                }
+
+                // Limpe o HashSet após a atualização
+                changedRowsEnc.Clear();
         }
-
 
 
         private void btnUpdateP_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < EncLinhagrid.RowCount - 1; i++)
+            foreach (int i in changedRowsEncLinha)
             {
-                update_query += "UPDATE LinhaEnc SET Qtd = " + EncLinhagrid.Rows[i].Cells[2].Value + "WHERE EncId = " + EncLinhagrid.Rows[i].Cells[0].Value + " AND ProdutoId = " + EncLinhagrid.Rows[i].Cells[1].Value + "; ";
+                Debug.Write("Product Changed row " + i + "||");
+                update_query += "UPDATE LinhaEnc SET Qtd = " + EncLinhagrid.Rows[i].Cells[2].Value + " WHERE EncId = " + EncLinhagrid.Rows[i].Cells[0].Value + " AND ProdutoId = " + EncLinhagrid.Rows[i].Cells[1].Value + "; ";
             }
+
+            // Limpe o HashSet após a atualização
+            changedRowsEncLinha.Clear();
         }
+
         private void Updatebutton_Click(object sender, EventArgs e)
         {
 
