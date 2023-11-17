@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -140,6 +141,7 @@ namespace SimpleDataApp
                         }
                         catch (Exception ex)
                         {
+                            Debug.Write("Error SQL Query: " + update_query);
                             MessageBox.Show("Error: " + ex.Message);
                         }
                     }
@@ -213,10 +215,15 @@ namespace SimpleDataApp
         {
             for (int i = 0; i < Encomendagrid.RowCount - 1; i++)
             {
-                update_query += "UPDATE Encomenda SET ClienteId = " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", Data = " + Encomendagrid.Rows[i].Cells[2].Value.ToString() + ", Total = " + Encomendagrid.Rows[i].Cells[3].Value.ToString() + "WHERE EncId = " + Encomendagrid.Rows[i].Cells[0].Value.ToString() + "; ";
+                string value = Encomendagrid.Rows[i].Cells[3].Value.ToString();
+                value = value.Replace(',', '.');
+
+                DateTime dt = DateTime.ParseExact(Encomendagrid.Rows[i].Cells[2].Value.ToString(), "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                string sqlFormattedDate = dt.ToString("yyyy-MM-dd HH:mm:ss");
+
+                update_query += "UPDATE Encomenda SET ClienteId = " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", Data = '" + sqlFormattedDate + "', Total = " + value + " WHERE EncId = " + Encomendagrid.Rows[i].Cells[0].Value.ToString() + "; ";
             }
         }
-
 
 
 
