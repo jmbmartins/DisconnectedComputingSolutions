@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -18,6 +19,8 @@ namespace SimpleDataApp
         int selected_id = -1;
         int selected_line = -1;
         int selected_product = -1;
+        int rows_encomenda;
+        int rows_linhas;
         string update_query = "";
         public void fetchData()
         {
@@ -36,6 +39,9 @@ namespace SimpleDataApp
                     adapter2.Fill(dataTable2);
                     Encomendagrid.DataSource = dataTable; // Binding the DataGridView to the DataTable
                     EncLinhagrid.DataSource = dataTable2;
+                    rows_encomenda = Encomendagrid.RowCount - 1;
+                    rows_linhas = EncLinhagrid.RowCount - 1;
+
                 }
                 catch (Exception ex)
                 {
@@ -111,10 +117,10 @@ namespace SimpleDataApp
             fetchData();
 
         }
- 
+
         private void deleter(object sender, EventArgs e)
         {   //esta query apaga a encomenda, se a encomenda tiver linhas nao deixa ser apagada, mudar isto para apagar da linha primeiro
-            if(selected_id != -1)
+            if (selected_id != -1)
                 update_query += "DELETE FROM Encomenda WHERE EncId = " + selected_id + "\n";
         }
         private void linedeleter(object sender, EventArgs e)
@@ -122,7 +128,28 @@ namespace SimpleDataApp
             if (selected_line != -1)
                 update_query += "DELETE FROM LinhaEnc WHERE EncId = " + selected_line + " AND ProdutoId = " + selected_product + "\n";
         }
+        private void Inserir_Encomendas(object sender, EventArgs e)
+        {
+            for (int i = rows_encomenda; i < Encomendagrid.RowCount - 1; i++)
+            {
+                // Original date and time string
+                string dateString = Encomendagrid.Rows[i].Cells[2].Value.ToString();
 
+                // Convert the string to a DateTime object
+                if (DateTime.TryParseExact(dateString, "dd-MMM-yy HH:mm:ss", null, DateTimeStyles.None, out DateTime dateTime))
+                {
+                    update_query += "INSERT INTO Encomenda (EncId, ClienteId, Data, Total) VALUES(" + Encomendagrid.Rows[i].Cells[0].Value.ToString() + ", " + Encomendagrid.Rows[i].Cells[1].Value.ToString() + ", \'" + dateTime.ToString("yyyy-MM-dd") + "\', " + Encomendagrid.Rows[i].Cells[3].Value.ToString() + "); ";
+                }
+            }
+        }
+
+        private void Inserir_linhas(object sender, EventArgs e)
+        {
+            for (int i = rows_linhas; i < EncLinhagrid.RowCount - 1; i++)
+            {
+                update_query += "INSERT INTO LinhaEnc (EncId, ProdutoId, Qtd) VALUES( " + EncLinhagrid.Rows[i].Cells[0].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[1].Value.ToString() + ", " + EncLinhagrid.Rows[i].Cells[2].Value.ToString() + "); ";
+            }
+        }
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (update_query != "")
@@ -136,7 +163,7 @@ namespace SimpleDataApp
                     e.Cancel = true;
                 }
             }
-            
+
         }
 
     }
