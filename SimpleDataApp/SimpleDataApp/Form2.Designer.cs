@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -54,8 +53,7 @@
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.label14 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
-            this.domainUpDown1 = new System.Windows.Forms.DomainUpDown();
-            this.SendDataBtn = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -68,15 +66,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(912, 294);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(846, 23);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(37, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Modo:";
             // 
             // label2
             // 
@@ -131,7 +120,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(849, 235);
+            this.button4.Location = new System.Drawing.Point(849, 89);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 11;
@@ -286,31 +275,22 @@
             this.textBox2.Size = new System.Drawing.Size(100, 20);
             this.textBox2.TabIndex = 27;
             // 
-            // domainUpDown1
+            // button1
             // 
-            this.domainUpDown1.Location = new System.Drawing.Point(804, 44);
-            this.domainUpDown1.Name = "domainUpDown1";
-            this.domainUpDown1.Size = new System.Drawing.Size(120, 20);
-            this.domainUpDown1.TabIndex = 28;
-            this.domainUpDown1.Text = "domainUpDown1";
-            // 
-            // SendDataBtn
-            // 
-            this.SendDataBtn.Location = new System.Drawing.Point(849, 94);
-            this.SendDataBtn.Name = "SendDataBtn";
-            this.SendDataBtn.Size = new System.Drawing.Size(75, 55);
-            this.SendDataBtn.TabIndex = 29;
-            this.SendDataBtn.Text = "REFRESH\r\nand\r\nUPDATE";
-            this.SendDataBtn.UseVisualStyleBackColor = true;
-            this.SendDataBtn.Click += new System.EventHandler(this.SendDataBtn_Click);
+            this.button1.Location = new System.Drawing.Point(849, 46);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 30;
+            this.button1.Text = "Disconnect";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(936, 570);
-            this.Controls.Add(this.SendDataBtn);
-            this.Controls.Add(this.domainUpDown1);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.dateTimePicker1);
@@ -335,7 +315,6 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.dataGridView1);
             this.Name = "Form2";
             this.Text = "Form2";
@@ -349,7 +328,6 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
@@ -374,7 +352,6 @@
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.DomainUpDown domainUpDown1;
-        private System.Windows.Forms.Button SendDataBtn;
+        private System.Windows.Forms.Button button1;
     }
 }

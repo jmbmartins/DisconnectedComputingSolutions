@@ -14,3 +14,4 @@ C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho
 C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.csproj.CopyComplete
 C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.exe
 C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.pdb
+C:\Users\Simoe\Documents\Mestrado\Sistemas de Gestão de Bases de Dados\Trabalho Prático 2\SimpleDataApp\SimpleDataApp\obj\Debug\SimpleDataApp.Form3.resources
