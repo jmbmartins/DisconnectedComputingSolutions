@@ -32,9 +32,11 @@ namespace SimpleDataApp
                         string idColumnName = "EncId"; // Change this to other primary key column names as needed
 
                         // Check if the row already exists in the database
-                        string checkQuery = $"SELECT COUNT(*) FROM {tableName} WHERE {idColumnName} = @{idColumnName}";
+                        string checkQuery = $"SELECT COUNT(*) FROM {tableName} WHERE {idColumnName} = @{idColumnName} AND TimestampEnc = @TimestampEnc";
                         SqlCommand checkCommand = new SqlCommand(checkQuery, connection);
                         checkCommand.Parameters.AddWithValue($"@{idColumnName}", row.Cells[idColumnName].Value);
+                        checkCommand.Parameters.AddWithValue("@TimestampEnc", row.Cells["TimestampEnc"].Value);
+
 
                         int count = (int)checkCommand.ExecuteScalar();
 
@@ -55,7 +57,7 @@ namespace SimpleDataApp
                             // Remove the trailing comma and space
                             updateQuery = updateQuery.TrimEnd(',', ' ');
 
-                            updateQuery += $" WHERE {idColumnName} = @{idColumnName}";
+                            updateQuery += $" WHERE {idColumnName} = @{idColumnName} AND TimestampEnc = @TimestampEnc";
 
                             SqlCommand updateCommand = new SqlCommand(updateQuery, connection);
 
@@ -69,6 +71,98 @@ namespace SimpleDataApp
                             }
 
                             updateCommand.Parameters.AddWithValue($"@{idColumnName}", row.Cells[idColumnName].Value);
+                            updateCommand.Parameters.AddWithValue("@TimestampEnc", row.Cells["TimestampEnc"].Value);
+
+                            int rowsUpdated = updateCommand.ExecuteNonQuery();
+                            if (rowsUpdated == 0)
+                            {
+                                // Conflict occurred
+                                MessageBox.Show("Conflict occurred. The row was updated by someone else.");
+
+                                // Fetch the updated data
+                                string selectQuery = $"SELECT * FROM {tableName} WHERE {idColumnName} = @{idColumnName}";
+                                SqlCommand selectCommand = new SqlCommand(selectQuery, connection);
+                                selectCommand.Parameters.AddWithValue($"@{idColumnName}", row.Cells[idColumnName].Value);
+                                SqlDataReader reader = selectCommand.ExecuteReader();
+
+                                if (reader.Read())
+                                {
+                                    // Store the updated data
+                                    List<object> updatedData = new List<object>();
+                                    for (int i = 0; i < reader.FieldCount; i++)
+                                    {
+                                        updatedData.Add(reader.GetValue(i));
+                                    }
+
+                                    // Show both versions of the data to the user
+                                    string originalDataString = string.Join(", ", row.Cells.Cast<DataGridViewCell>().Select(cell => cell.Value));
+                                    string updatedDataString = string.Join(", ", updatedData);
+                                    DialogResult result = MessageBox.Show($"Original data: {originalDataString}\nUpdated data: {updatedDataString}\nDo you want to overwrite the original data with the updated data?", "Conflict occurred", MessageBoxButtons.YesNo);
+
+                                    if (result == DialogResult.Yes)
+                                    {
+                                        // Update the DataGridView row with the updated data
+                                        for (int i = 0; i < reader.FieldCount; i++)
+                                        {
+                                            row.Cells[i].Value = updatedData[i];
+                                        }
+
+                                        // Try to update the database again
+                                        bool updateSuccessful = false;
+                                        while (!updateSuccessful)
+                                        {
+                                            try
+                                            {
+                                                rowsUpdated = updateCommand.ExecuteNonQuery();
+                                                if (rowsUpdated > 0)
+                                                {
+                                                    updateSuccessful = true;
+                                                }
+                                                else
+                                                {
+                                                    // Conflict occurred again, fetch the updated data again
+                                                    reader = selectCommand.ExecuteReader();
+                                                    if (reader.Read())
+                                                    {
+                                                        updatedData.Clear();
+                                                        for (int i = 0; i < reader.FieldCount; i++)
+                                                        {
+                                                            updatedData.Add(reader.GetValue(i));
+                                                        }
+                                                    }
+                                                    reader.Close();
+
+                                                    // Show the updated data to the user again
+                                                    updatedDataString = string.Join(", ", updatedData);
+                                                    result = MessageBox.Show($"Another conflict occurred. The updated data is now: {updatedDataString}\nDo you want to overwrite the original data with the updated data?", "Conflict occurred", MessageBoxButtons.YesNo);
+
+                                                    if (result == DialogResult.Yes)
+                                                    {
+                                                        // Update the DataGridView row with the updated data
+                                                        for (int i = 0; i < reader.FieldCount; i++)
+                                                        {
+                                                            row.Cells[i].Value = updatedData[i];
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        // User chose not to overwrite, break the loop
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                // Handle any exceptions that occur when trying to update the database
+                                                MessageBox.Show("Error: " + ex.Message);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                reader.Close();
+                            }
 
                             updateCommand.ExecuteNonQuery();
                         }
