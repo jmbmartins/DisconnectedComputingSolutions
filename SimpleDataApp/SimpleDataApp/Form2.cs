@@ -29,7 +29,7 @@ namespace SimpleDataApp
         }
         public void fetchData()
         {
-            string query = "SELECT * FROM Encomenda";
+            string query = "SELECT EncId, ClienteId, Data, Total FROM Encomenda"; // Exclude TimestampEnc
             SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
             
 
