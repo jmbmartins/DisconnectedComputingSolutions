@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Trab2_6ModelStoreContainer" CdmEntityContainer="Trab2_6Entities">
+    <EntitySetMapping Name="Cliente">
+      <EntityTypeMapping TypeName="Trab2_6Model.Cliente">
+        <MappingFragment StoreEntitySet="Cliente">
+          <ScalarProperty Name="ClienteId" ColumnName="ClienteId" />
+          <ScalarProperty Name="Nome" ColumnName="Nome" />
+          <ScalarProperty Name="Morada" ColumnName="Morada" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Encomenda">
+      <EntityTypeMapping TypeName="Trab2_6Model.Encomenda">
+        <MappingFragment StoreEntitySet="Encomenda">
+          <ScalarProperty Name="EncId" ColumnName="EncId" />
+          <ScalarProperty Name="ClienteId" ColumnName="ClienteId" />
+          <ScalarProperty Name="Data" ColumnName="Data" />
+          <ScalarProperty Name="Total" ColumnName="Total" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LinhaEnc">
+      <EntityTypeMapping TypeName="Trab2_6Model.LinhaEnc">
+        <MappingFragment StoreEntitySet="LinhaEnc">
+          <ScalarProperty Name="EncId" ColumnName="EncId" />
+          <ScalarProperty Name="ProdutoId" ColumnName="ProdutoId" />
+          <ScalarProperty Name="Qtd" ColumnName="Qtd" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Produto">
+      <EntityTypeMapping TypeName="Trab2_6Model.Produto">
+        <MappingFragment StoreEntitySet="Produto">
+          <ScalarProperty Name="ProdutoId" ColumnName="ProdutoId" />
+          <ScalarProperty Name="Designacao" ColumnName="Designacao" />
+          <ScalarProperty Name="Preco" ColumnName="Preco" />
+          <ScalarProperty Name="QtdStock" ColumnName="QtdStock" />
+          <ScalarProperty Name="QtdEncomendado" ColumnName="QtdEncomendado" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
