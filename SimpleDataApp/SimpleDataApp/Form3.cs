@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace SimpleDataApp
 {
@@ -31,17 +32,22 @@ namespace SimpleDataApp
 
                         string idColumnName = "EncId"; // Change this to other primary key column names as needed
 
+                        // Get the TimestampEnc value from the original DataTable in Form2
+                        int rowIndex = row.Index; // Get the index of the current row
+                        byte[] timestampEnc = (byte[])Form2.dataTable.Rows[rowIndex]["TimestampEnc"];
+
                         // Check if the row already exists in the database
-                        string checkQuery = $"SELECT COUNT(*) FROM {tableName} WHERE {idColumnName} = @{idColumnName} AND TimestampEnc = @TimestampEnc";
+                        string checkQuery = $"SELECT COUNT(*) FROM {tableName} WHERE {idColumnName} = @{idColumnName}";
                         SqlCommand checkCommand = new SqlCommand(checkQuery, connection);
                         checkCommand.Parameters.AddWithValue($"@{idColumnName}", row.Cells[idColumnName].Value);
-                        checkCommand.Parameters.AddWithValue("@TimestampEnc", row.Cells["TimestampEnc"].Value);
+                        checkCommand.Parameters.AddWithValue("@TimestampEnc", timestampEnc);
 
 
                         int count = (int)checkCommand.ExecuteScalar();
 
                         if (count > 0)
                         {
+
                             // Row already exists, perform an UPDATE
                             string updateQuery = $"UPDATE {tableName} SET ";
 
@@ -71,11 +77,12 @@ namespace SimpleDataApp
                             }
 
                             updateCommand.Parameters.AddWithValue($"@{idColumnName}", row.Cells[idColumnName].Value);
-                            updateCommand.Parameters.AddWithValue("@TimestampEnc", row.Cells["TimestampEnc"].Value);
+                            updateCommand.Parameters.AddWithValue("@TimestampEnc", timestampEnc);
 
                             int rowsUpdated = updateCommand.ExecuteNonQuery();
                             if (rowsUpdated == 0)
                             {
+                                Debug.Write("Conflito");
                                 // Conflict occurred
                                 MessageBox.Show("Conflict occurred. The row was updated by someone else.");
 
@@ -87,11 +94,14 @@ namespace SimpleDataApp
 
                                 if (reader.Read())
                                 {
-                                    // Store the updated data
+                                    int timestampIndex = reader.GetOrdinal("timestampEnc");
                                     List<object> updatedData = new List<object>();
                                     for (int i = 0; i < reader.FieldCount; i++)
                                     {
-                                        updatedData.Add(reader.GetValue(i));
+                                        if (i != timestampIndex)
+                                        {
+                                            updatedData.Add(reader.GetValue(i));
+                                        }
                                     }
 
                                     // Show both versions of the data to the user
@@ -102,7 +112,7 @@ namespace SimpleDataApp
                                     if (result == DialogResult.Yes)
                                     {
                                         // Update the DataGridView row with the updated data
-                                        for (int i = 0; i < reader.FieldCount; i++)
+                                        for (int i = 0; i < updatedData.Count; i++)
                                         {
                                             row.Cells[i].Value = updatedData[i];
                                         }
@@ -121,6 +131,13 @@ namespace SimpleDataApp
                                                 else
                                                 {
                                                     // Conflict occurred again, fetch the updated data again
+
+                                                    // Close the existing DataReader before opening a new one
+                                                    if (reader != null)
+                                                    {
+                                                        reader.Close();
+                                                    }
+
                                                     reader = selectCommand.ExecuteReader();
                                                     if (reader.Read())
                                                     {
@@ -155,7 +172,16 @@ namespace SimpleDataApp
                                             {
                                                 // Handle any exceptions that occur when trying to update the database
                                                 MessageBox.Show("Error: " + ex.Message);
+                                                Debug.Write("Error: " + ex.Message);
                                                 break;
+                                            }
+                                            finally
+                                            {
+                                                // Close the SqlDataReader before the next iteration
+                                                if (reader != null)
+                                                {
+                                                    reader.Close();
+                                                }
                                             }
                                         }
                                     }
@@ -163,11 +189,15 @@ namespace SimpleDataApp
 
                                 reader.Close();
                             }
-
-                            updateCommand.ExecuteNonQuery();
+                            else
+                            {
+                                // If no conflict occurred, execute the update command
+                                updateCommand.ExecuteNonQuery();
+                            }
                         }
                         else
                         {
+                           
                             // Row doesn't exist, perform an INSERT
                             string insertQuery = $"INSERT INTO {tableName} (";
 
@@ -208,6 +238,7 @@ namespace SimpleDataApp
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
+                Debug.Write("Error: " + ex.Message);
             }
         }
 
@@ -219,8 +250,13 @@ namespace SimpleDataApp
 
         private void Form3_Load(object sender, EventArgs e)
         {
-            DataTable Form2Datatable = Form2.dataTable;
-            dataGridView1.DataSource = Form2Datatable;
+            DataTable form2DataTable = Form2.dataTable;
+
+            // Create a new DataTable for the DataGridView that doesn't include the TimestampEnc column
+            DataTable dataGridViewDataTable = form2DataTable.Copy();
+            dataGridViewDataTable.Columns.Remove("TimestampEnc");
+
+            dataGridView1.DataSource = dataGridViewDataTable;
         }
 
         private void button1_Click(object sender, EventArgs e)

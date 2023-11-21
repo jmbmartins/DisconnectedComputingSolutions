@@ -29,24 +29,25 @@ namespace SimpleDataApp
         }
         public void fetchData()
         {
-            string query = "SELECT EncId, ClienteId, Data, Total FROM Encomenda"; // Exclude TimestampEnc
+            string query = "SELECT EncId, ClienteId, Data, Total, TimestampEnc FROM Encomenda"; // Include TimestampEnc
             SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-            
 
             try
             {
                 dataTable.Rows.Clear();
                 adapter.Fill(dataTable);
-                dataGridView1.DataSource = dataTable; // Binding the DataGridView to the DataTable
-                
 
+                // Create a new DataTable for the DataGridView that doesn't include the TimestampEnc column
+                DataTable dataGridViewDataTable = dataTable.Copy();
+                dataGridViewDataTable.Columns.Remove("TimestampEnc");
+
+                dataGridView1.DataSource = dataGridViewDataTable; // Binding the DataGridView to the DataTable
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
-
         public Form2()
         {
             InitializeComponent();
