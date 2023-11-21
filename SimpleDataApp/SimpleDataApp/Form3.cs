@@ -109,6 +109,7 @@ namespace SimpleDataApp
                                     string updatedDataString = string.Join(", ", updatedData);
                                     DialogResult result = MessageBox.Show($"Original data: {originalDataString}\nUpdated data: {updatedDataString}\nDo you want to overwrite the original data with the updated data?", "Conflict occurred", MessageBoxButtons.YesNo);
 
+                                    reader.Close();
                                     if (result == DialogResult.Yes)
                                     {
                                         // Update the DataGridView row with the updated data
@@ -117,72 +118,22 @@ namespace SimpleDataApp
                                             row.Cells[i].Value = updatedData[i];
                                         }
 
-                                        // Try to update the database again
-                                        bool updateSuccessful = false;
-                                        while (!updateSuccessful)
+                                    }
+                                    else
+                                    {
+                                        // User chose not to overwrite, update the database with the original data
+                                        string updateSql = "UPDATE Encomenda SET Total = @OriginalValue WHERE EncId = @EncId";
+
+                                        using (SqlCommand originalUpdateCommand = new SqlCommand(updateSql, connection))
                                         {
-                                            try
-                                            {
-                                                rowsUpdated = updateCommand.ExecuteNonQuery();
-                                                if (rowsUpdated > 0)
-                                                {
-                                                    updateSuccessful = true;
-                                                }
-                                                else
-                                                {
-                                                    // Conflict occurred again, fetch the updated data again
+                                            // Get the original value and EncId from the row
+                                            object originalValue = row.Cells["Total"].Value;
+                                            object encId = row.Cells["EncId"].Value;
 
-                                                    // Close the existing DataReader before opening a new one
-                                                    if (reader != null)
-                                                    {
-                                                        reader.Close();
-                                                    }
+                                            originalUpdateCommand.Parameters.AddWithValue("@OriginalValue", originalValue);
+                                            originalUpdateCommand.Parameters.AddWithValue("@EncId", encId);
 
-                                                    reader = selectCommand.ExecuteReader();
-                                                    if (reader.Read())
-                                                    {
-                                                        updatedData.Clear();
-                                                        for (int i = 0; i < reader.FieldCount; i++)
-                                                        {
-                                                            updatedData.Add(reader.GetValue(i));
-                                                        }
-                                                    }
-                                                    reader.Close();
-
-                                                    // Show the updated data to the user again
-                                                    updatedDataString = string.Join(", ", updatedData);
-                                                    result = MessageBox.Show($"Another conflict occurred. The updated data is now: {updatedDataString}\nDo you want to overwrite the original data with the updated data?", "Conflict occurred", MessageBoxButtons.YesNo);
-
-                                                    if (result == DialogResult.Yes)
-                                                    {
-                                                        // Update the DataGridView row with the updated data
-                                                        for (int i = 0; i < reader.FieldCount; i++)
-                                                        {
-                                                            row.Cells[i].Value = updatedData[i];
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        // User chose not to overwrite, break the loop
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                                // Handle any exceptions that occur when trying to update the database
-                                                MessageBox.Show("Error: " + ex.Message);
-                                                Debug.Write("Error: " + ex.Message);
-                                                break;
-                                            }
-                                            finally
-                                            {
-                                                // Close the SqlDataReader before the next iteration
-                                                if (reader != null)
-                                                {
-                                                    reader.Close();
-                                                }
-                                            }
+                                            originalUpdateCommand.ExecuteNonQuery();
                                         }
                                     }
                                 }
