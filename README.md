@@ -1,7 +1,7 @@
 Disconnected Computing Solutions
 ================================
 
-Disconnected Computing Solutions repository hosts SimpleDataApp, an application designed for offline data management. It includes SQL query files for table creation and data generation. The Rel_ComputacaoDesconectada.pdf report provides a detailed account of the project's execution.
+This repository hosts an application designed for offline data management.
 
 Application Functionality
 -------------------------
@@ -11,7 +11,7 @@ SimpleDataApp offers the following functions:
 1.  **Obtain a Local Copy of Data:** Users can retrieve a local copy of data, stored in an in-memory table for offline access.
 2.  **Save Changes to Local Data:** Allows users to make modifications to the local data, ensuring changes are saved locally.
 3.  **Submit Changes to the Server:** Facilitates the submission of local data changes to the server once a connection is established.
-4.  **Address Reconciliation Issues:** Provides mechanisms to handle data reconciliation challenges that arise between the local and server databases.
+4.  **Address Reconciliation Issues:** Provides mechanisms to handle data reconciliation challenges that arise between the local and server databases. This involves submitting local changes to the server and resolving conflicts that may arise when local and server data are inconsistent.
 
 Contents
 --------
