@@ -1,4 +1,4 @@
-Disconnected Computing Solutions
+**Disconnected Computing Solutions**
 
 Disconnected Computing Solutions repository hosts SimpleDataApp, an application designed for offline data management. It includes SQL query files for table creation and data generation. The Rel_ComputacaoDesconectada.pdf report provides a detailed account of the project's execution.
 
